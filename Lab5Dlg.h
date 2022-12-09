@@ -20,7 +20,7 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 
-#define MAX 6
+#define MAX 50
 // Implementation
 protected:
 	HICON m_hIcon;
@@ -48,5 +48,5 @@ public:
 	int BinOut;
 	CString BinText;
 	afx_msg void OnBnClickedUniq();
-	CListBox ListB;
+
 };

@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <iterator>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 #ifdef _DEBUG
@@ -65,7 +66,7 @@ CLab5Dlg::CLab5Dlg(CWnd* pParent /*=nullptr*/)
 	, BinOut(0)
 	, LinText(_T(""))
 	, BinText(_T(""))
-	, ListB()
+	
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -80,7 +81,7 @@ void CLab5Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_BVAL, BinVal);
 	DDX_Text(pDX, IDC_BOUT, BinOut);
 	DDX_Text(pDX, IDC_BTEXT, BinText);
-	DDX_Control(pDX, IDC_LISTB, ListB);
+
 }
 
 BEGIN_MESSAGE_MAP(CLab5Dlg, CDialogEx)
@@ -207,7 +208,6 @@ void CLab5Dlg::OnBnClickedAdd()
 void CLab5Dlg::OnBnClickedCalc()
 {
 	// TODO: Add your control notification handler code here
-	// TODO: Add your control notification handler code here
 	double Medie = 0, Disp = 0;
 	double mini = Serie[0], maxi = Serie[0], ampi;
 	for (int i = 0; i < Volum; i++) {
@@ -242,12 +242,14 @@ void CLab5Dlg::OnBnClickedCalc()
 
 void CLab5Dlg::OnBnClickedSort()
 {
-	copy(Serie, Serie + Volum, copie);
+	for (int i = 0; i < Volum; i++) 
+		copie[i] = Serie[i];
 	sort(copie, copie + Volum);
+	((CListBox*)GetDlgItem(IDC_SORTUNIQ))->ResetContent();
 	for (int i = 0; i < Volum; i++) {
 		CString aux;
-		aux.Format(_T("%f"), copie[i]);
-		ListB.AddString(aux);
+		aux.Format((LPCWSTR)L"%.1lf", copie[i]);
+		((CListBox*)GetDlgItem(IDC_SORTUNIQ))->AddString(aux);
 	}
 }
 
@@ -255,7 +257,29 @@ void CLab5Dlg::OnBnClickedSort()
 void CLab5Dlg::OnBnClickedUniq()
 {
 	// TODO: Add your control notification handler code here
-
+	int puppet = Volum;
+	for (int i = 0; i < puppet; i++)
+	{
+		for (int j = i + 1; j < puppet;)
+		{
+			if (copie[j] == copie[i])
+			{
+				for (int k = j; k < puppet; k++)
+				{
+					copie[k] = copie[k + 1];
+				}
+				puppet--;
+			}
+			else
+				j++;
+		}
+	}
+	((CListBox*)GetDlgItem(IDC_SORTUNIQ))->ResetContent();
+	for (int i = 0; i < puppet; i++) {
+		CString aux;
+		aux.Format((LPCWSTR)L"%.1lf", copie[i]);
+		((CListBox*)GetDlgItem(IDC_SORTUNIQ))->AddString(aux);
+	}
 }
 
 void CLab5Dlg::OnBnClickedLsea()
@@ -266,7 +290,7 @@ void CLab5Dlg::OnBnClickedLsea()
 		if (Serie[i] == LinVal)
 		{
 			LinText = "Prin LS am gasit la index:";
-			LinOut = i + 1;
+			LinOut = i;
 			break;
 		}
 		if (i + 1 == Volum) {
@@ -282,23 +306,22 @@ void CLab5Dlg::OnBnClickedBsea()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData();
-	//copy(begin(Serie), end(Serie), begin(copie));
-	//sort(begin(copie), end(copie));
+	for (int i = 0; i < Volum; i++)
+		copie[i] = Serie[i];
+	sort(copie, copie + Volum);
 	int low = 0, high = Volum - 1, mid = 0;
 	while (low <= high) {
 		mid = low + (high - low) / 2;
-		if (Serie[mid] == BinVal) {
+		if (copie[mid] == BinVal) {
 			BinText = "Prin BS am gasit la index:";
-			BinOut = mid + 1;
+			BinOut = mid;
 			break;
 		}
-		if (Serie[mid] < BinVal)
+		if (copie[mid] < BinVal)
 			low = mid + 1;
 		else
 			high = mid - 1;
 	}
-	BinText = "Prin BS n-am gasit valoarea";
-	BinOut = 0;
 	UpdateData(FALSE);
 }
 
