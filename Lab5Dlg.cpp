@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <iterator>
 #include <iostream>
-#include <vector>
 using namespace std;
 
 #ifdef _DEBUG
@@ -209,7 +208,7 @@ void CLab5Dlg::OnBnClickedCalc()
 {
 	// TODO: Add your control notification handler code here
 	double Medie = 0, Disp = 0;
-	double mini = Serie[0], maxi = Serie[0], ampi;
+	double mini = Serie[0], maxi = Serie[0], ampi = 0;
 	for (int i = 0; i < Volum; i++) {
 		if (mini > Serie[i])
 			mini = Serie[i];
@@ -306,21 +305,23 @@ void CLab5Dlg::OnBnClickedBsea()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData();
-	for (int i = 0; i < Volum; i++)
-		copie[i] = Serie[i];
-	sort(copie, copie + Volum);
-	int low = 0, high = Volum - 1, mid = 0;
+	int low = 0, high = Volum - 1, mid = 0, checker = 0;
 	while (low <= high) {
 		mid = low + (high - low) / 2;
 		if (copie[mid] == BinVal) {
 			BinText = "Prin BS am gasit la index:";
 			BinOut = mid;
+			checker = 1;
 			break;
 		}
 		if (copie[mid] < BinVal)
 			low = mid + 1;
 		else
 			high = mid - 1;
+	}
+	if (checker == 0) {
+		BinText = "Prin BS n-am gasit valoarea";
+		BinOut = 0;
 	}
 	UpdateData(FALSE);
 }

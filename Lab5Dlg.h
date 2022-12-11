@@ -8,20 +8,20 @@
 // CLab5Dlg dialog
 class CLab5Dlg : public CDialogEx
 {
-// Construction
+	// Construction
 public:
 	CLab5Dlg(CWnd* pParent = nullptr);	// standard constructor
 
-// Dialog Data
+	// Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_LAB5_DIALOG };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 
 #define MAX 50
-// Implementation
+	// Implementation
 protected:
 	HICON m_hIcon;
 
